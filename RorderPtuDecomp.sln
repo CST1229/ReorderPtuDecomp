@@ -5,7 +5,7 @@ VisualStudioVersion = 17.4.33103.184
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RorderPtuDecomp", "RorderPtuDecomp\RorderPtuDecomp.csproj", "{66DB6587-5D6A-4AE7-B5B5-2D726713DBDB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UndertaleModLib", "..\..\..\Documents\UndertaleModTool\UndertaleModLib\UndertaleModLib.csproj", "{E0262DF4-3BFD-4B54-AD88-69C8FD74516F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UndertaleModLib", "..\UndertaleModToolCE\UndertaleModLib\UndertaleModLib.csproj", "{E0262DF4-3BFD-4B54-AD88-69C8FD74516F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
