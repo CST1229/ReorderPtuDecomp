@@ -60,8 +60,8 @@ void Order<T>(IList<T> namedResources) where T : UndertaleNamedResource
         int yycId = GetResourceIndex(resourceName);
         if (yycId == -1)
         {
-            Console.WriteLine("Resource not found: " + resourceName);
-            failed = true;
+            Console.WriteLine("Resource not found: " + resourceName + " - Trying to fit other resource");
+            resources.Insert(0, null);
         }
         else
         {
@@ -71,6 +71,23 @@ void Order<T>(IList<T> namedResources) where T : UndertaleNamedResource
             resources.Insert(0, toAdd);
         }
     }
+
+    int fillIndex = -1;
+    do {
+        fillIndex = resources.IndexOf(null);
+        if (fillIndex < 0) break;
+        var filledIndex = resources.Count - 1;
+        var filledObject = resources[filledIndex];
+        if (filledObject == null) {
+            Console.WriteLine("Could not fill in resources.");
+            failed = true;
+            break;
+        }
+
+        resources.RemoveAt(filledIndex);
+        resources.RemoveAt(fillIndex);
+        resources.Insert(fillIndex, filledObject);
+    } while (fillIndex >= 0);
 }
 
 Console.WriteLine("Ordering gameobjects...");
