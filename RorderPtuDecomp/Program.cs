@@ -25,18 +25,18 @@ catch (InvalidOperationException)
 }
 
 
-Console.WriteLine("Reading yyc file...");
+Console.WriteLine("Reading .yyp file...");
 //YYP FILE
 using Stream yypFile = File.OpenRead(yypPath);
 JsonObject yycJson = JsonSerializer.Deserialize<JsonObject>(yypFile, 
     new JsonSerializerOptions{AllowTrailingCommas=true})!;
 JsonArray resources = (yycJson["resources"] as JsonArray)!;
 
-Console.WriteLine("Reading undertale data file... (takes a-while)");
+Console.WriteLine("Reading data.win... (may take a while)");
 //UNDERTALE-DATA FILE
 UndertaleData LoadData(string path) => UndertaleIO.Read(File.OpenRead(path), null);
 UndertaleData data = LoadData(origPath);
-Console.WriteLine("Done reading undertale data file!\n");
+Console.WriteLine("Done reading data.win!\n");
 
 int GetResourceIndex(string resourceName)
 {
@@ -90,7 +90,7 @@ void Order<T>(IList<T> namedResources) where T : UndertaleNamedResource
     } while (fillIndex >= 0);
 }
 
-Console.WriteLine("Ordering gameobjects...");
+Console.WriteLine("Ordering objects...");
 Order(data.GameObjects);
 Console.WriteLine("Ordering sprites...");
 Order(data.Sprites);
@@ -99,8 +99,8 @@ if (failed)
 {
     Console.ForegroundColor = ConsoleColor.Red;
     Console.WriteLine("Resources not found.\n" +
-    "It means the object exists in the original but not the modded version (YYC file)\n" +
-    "Please include it in the modded (decomp) then try again");
+    "It means the object exists in the original, but not in the modded version (.yyp file).\n" +
+    "Please include it in the modded (decomp) then try again.");
     Console.ReadLine();
     return 1; //ERROR
 }
