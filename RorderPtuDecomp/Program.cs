@@ -60,8 +60,7 @@ void Order<T>(IList<T> namedResources) where T : UndertaleNamedResource
         int yycId = GetResourceIndex(resourceName);
         if (yycId == -1)
         {
-            Console.WriteLine("Resource not found: " + resourceName + " - Trying to fit other resource");
-            resources.Insert(0, null);
+            // do nothing on this pass
         }
         else
         {
@@ -71,23 +70,33 @@ void Order<T>(IList<T> namedResources) where T : UndertaleNamedResource
             resources.Insert(0, toAdd);
         }
     }
+    for (int i = namedResources.Count - 1; i >= 0; i--)
+    {
+        var resouce = namedResources[i];
+        string resourceName = resouce.Name.Content;
+        int yycId = GetResourceIndex(resourceName);
+        if (yycId == -1)
+        {
+            Console.WriteLine("Resource not found: " + resourceName + " - Trying to fit other resource");
+            var filledIndex = resources.Count - 1;
+            var filledObject = resources[filledIndex];
+            if (filledObject == resouce) {
+                Console.WriteLine("Could not fill in resources.");
+                failed = true;
+                return;
+            }
 
-    int fillIndex = -1;
-    do {
-        fillIndex = resources.IndexOf(null);
-        if (fillIndex < 0) break;
-        var filledIndex = resources.Count - 1;
-        var filledObject = resources[filledIndex];
-        if (filledObject == null) {
-            Console.WriteLine("Could not fill in resources.");
-            failed = true;
-            break;
+            resources.RemoveAt(filledIndex);
+            resources.Insert(0, filledObject);
         }
-
-        resources.RemoveAt(filledIndex);
-        resources.RemoveAt(fillIndex);
-        resources.Insert(fillIndex, filledObject);
-    } while (fillIndex >= 0);
+        else
+        {
+            //Insert to start
+            var toAdd = resources[yycId];
+            resources.RemoveAt(yycId);
+            resources.Insert(0, toAdd);
+        }
+    }
 }
 
 Console.WriteLine("Ordering objects...");
