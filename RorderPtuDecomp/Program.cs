@@ -51,7 +51,7 @@ int GetResourceIndex(string resourceName)
 }
 
 bool failed = false;
-void Order<T>(IList<T> namedResources) where T : UndertaleNamedResource
+void Order<T>(IList<T> namedResources, string folderName) where T : UndertaleNamedResource
 {
     for (int i = namedResources.Count - 1; i >= 0; i--)
     {
@@ -78,9 +78,16 @@ void Order<T>(IList<T> namedResources) where T : UndertaleNamedResource
         if (yycId == -1)
         {
             Console.WriteLine("Resource not found: " + resourceName + " - Trying to fit other resource");
-            var filledIndex = resources.Count - 1;
+            var filledIndex = resources.Count;
+            var path = "";
+            var name = "";
+            do {
+                filledIndex--;
+                path = resources[filledIndex]!["id"]!["path"]!.GetValue<string>();
+                name = resources[filledIndex]!["id"]!["name"]!.GetValue<string>();
+            } while ((!path.StartsWith(folderName) || namedResources.ByName(name) != null) && filledIndex > 0);
             var filledObject = resources[filledIndex];
-            if (filledObject == resouce) {
+            if (filledObject == null) {
                 Console.WriteLine("Could not fill in resources.");
                 failed = true;
                 return;
@@ -100,9 +107,9 @@ void Order<T>(IList<T> namedResources) where T : UndertaleNamedResource
 }
 
 Console.WriteLine("Ordering objects...");
-Order(data.GameObjects);
+Order(data.GameObjects, "objects");
 Console.WriteLine("Ordering sprites...");
-Order(data.Sprites);
+Order(data.Sprites, "sprites");
 
 if (failed)
 {
